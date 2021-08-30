@@ -18,7 +18,7 @@ router.get('/new', async(req, res) => {
         let checklist = new Checklist()
         res.status(200).render('checklists/new', {checklist: checklist})
     } catch (error) {
-        res.status(500).render('pages/erro', {errors: 'Erro ao carregar o formulário'})
+        res.status(500).render('pages/error', {errors: 'Erro ao carregar o formulário'})
     }
 })
 
@@ -44,16 +44,16 @@ router.post('/', async (req, res) => {
 
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async(req, res) => {
     try {
-        let checklist = await Checklist.findById(req.params.id)
+        let checklist = await Checklist.findById(req.params.id).populate('tasks')
         res.status(200).render('checklists/show', {checklist: checklist})
     } catch (error) {
-        res.status(500).render('pages/error', {error: 'Erro ao exibir as listas'})
+        res.status(500).render('pages/error', {error: 'Erro ao exibir as listas de tarefas'})
     }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async(req, res) => {
     let { name } = req.body.checklist
     let checklist = await Checklist.findById(req.params.id)
     try {
@@ -65,7 +65,7 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async(req, res) => {
     try {
         let checklist = await Checklist.findByIdAndRemove(req.params.id)
         res.redirect('/checklists')
